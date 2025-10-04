@@ -1,36 +1,25 @@
-package com.clinic.service;
+package main;
 
-import com.clinic.model.Appointment;
-import com.clinic.model.Doctor;
-import com.clinic.repository.AppointmentRepository;
-import com.clinic.repository.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepo;
+    private final List<Appointment> appointments = new ArrayList<>();
 
-    @Autowired
-    private DoctorRepository doctorRepo;
+    // Q6 - booking method
+    public Appointment book(Appointment appointment) {
+        appointments.add(appointment);
+        return appointment;
+    }
 
-    public String bookAppointment(Long doctorId, Appointment appointment) {
-        Doctor doctor = doctorRepo.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
-
-        LocalDateTime time = appointment.getAppointmentTime();
-        boolean exists = appointmentRepo.existsByDoctorAndAppointmentTime(doctor, time);
-
-        if (exists) {
-            return "Time slot already booked.";
-        }
-
-        appointment.setDoctor(doctor);
-        appointmentRepo.save(appointment);
-        return "Appointment booked successfully.";
+    // Q6 - retrieve by date
+    public List<Appointment> getAppointmentsForDoctor(Long doctorId, LocalDate date) {
+        return appointments.stream()
+                .filter(a -> a.getDoctor().getDoctorId().equals(doctorId)
+                        && a.getAppointmentTime().toLocalDate().equals(date))
+                .toList();
     }
 }
