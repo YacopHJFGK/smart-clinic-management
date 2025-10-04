@@ -1,7 +1,6 @@
-package com.clinic.model;
+package main;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,15 +10,15 @@ public class Appointment {
     private Long appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @Future
-    private LocalDateTime appointmentTime;
+    @Column(nullable = false)
+    private LocalDateTime appointmentTime; // Q4 yêu cầu
 
-    // Getters & Setters
+    private String status;
+
+    // getters & setters
 }
