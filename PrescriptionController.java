@@ -1,27 +1,17 @@
-package com.clinic.controller;
+package main;
 
-import com.clinic.model.Prescription;
-import com.clinic.service.PrescriptionService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/prescriptions")
+@RequestMapping("/prescription")
 public class PrescriptionController {
 
-    @Autowired
-    private PrescriptionService prescriptionService;
-
-    @PostMapping
-    public ResponseEntity<?> addPrescription(@RequestBody Prescription prescription) {
-        return ResponseEntity.ok(prescriptionService.addPrescription(prescription));
-    }
-
-    @GetMapping("/{appointmentId}")
-    public ResponseEntity<?> getPrescription(@PathVariable Long appointmentId) {
-        Prescription p = prescriptionService.getPrescriptionByAppointment(appointmentId);
-        if (p == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(p);
+    @PostMapping("/save")
+    public ResponseEntity<String> save(@RequestBody String prescription, @RequestParam String token) {
+        if(token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+        return ResponseEntity.ok("Prescription saved: " + prescription);
     }
 }
