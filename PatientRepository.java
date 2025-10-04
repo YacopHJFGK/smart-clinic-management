@@ -1,8 +1,9 @@
-package com.clinic.repository;
+package main;
 
-import com.clinic.model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    Patient findByEmail(String email);
+    Optional<Patient> findByEmail(String email);
+    Optional<Patient> findByEmailOrPhone(String email, String phone);
 }
