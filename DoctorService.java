@@ -1,21 +1,19 @@
-package com.clinic.service;
+package main;
 
-import com.clinic.model.Doctor;
-import com.clinic.repository.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DoctorService {
 
-    @Autowired
-    private DoctorRepository doctorRepo;
+    public List<String> getAvailableSlots(String doctorName, String date) {
+        return Arrays.asList("10:00", "14:00");
+    }
 
-    public Doctor updateAvailableTimes(Long doctorId, List<String> times) {
-        Doctor doctor = doctorRepo.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
-        doctor.setAvailableTimes(times);
-        return doctorRepo.save(doctor);
+    public String validateLogin(String email, String password) {
+        if(email.equals("doctor@test.com") && password.equals("123")) {
+            return "Login success";
+        }
+        return "Invalid credentials";
     }
 }
