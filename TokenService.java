@@ -1,27 +1,24 @@
-package com.clinic.service;
+package main;
 
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.security.Key;
 
 @Service
 public class TokenService {
-
-    private final Map<String, String> tokenStore = new HashMap<>();
+    private final String secret = "MySuperSecretKeyForJwt123456789";
 
     public String generateToken(String email) {
-        String token = UUID.randomUUID().toString();
-        tokenStore.put(token, email);
-        return token;
+        Key key = Keys.hmacShaKeyFor(secret.getBytes());
+        return Jwts.builder()
+                .setSubject(email)
+                .signWith(key)
+                .compact();
     }
 
-    public boolean validateToken(String token) {
-        return tokenStore.containsKey(token);
-    }
-
-    public String getEmailFromToken(String token) {
-        return tokenStore.get(token);
+    public Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
 }
